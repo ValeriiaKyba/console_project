@@ -12,9 +12,8 @@ from graph import draw_graph, draw_clean, draw_hist
 
 def validate_date_str(s):
     try:
-        datetime.datetime.strptime(s, '%Y%-m%-%d')
+        datetime.datetime.strptime(s, '%Y-%m-%d')
     except Exception as e:
-        print(e)
         return False
     return True
 
@@ -54,14 +53,14 @@ main_question = [
     {
         'type': 'input',
         'name': 'end_period',
-        'message': 'Введіть початок періоду.',
+        'message': 'Введіть кінець періоду. (Рік-місяць-день)',
         'when': lambda ans: ans.get('start_period'),
         'validate': validate_date_str
     },
     {
         'type': 'checkbox',
         'qmark': '😃',
-        'message': 'Оберіть поля які бажаєте бачити на графіку.',
+        'message': 'Оберіть поля, які бажаєте бачити на графіку.',
         'name': 'fields',
         'choices': get_fields_list(),
         'when': lambda ans: ans.get('theme') == display_graph,
@@ -93,24 +92,25 @@ main_question = [
 
 ]
 
-answer = prompt(main_question, style=custom_style_2)
-pprint(answer)
 
+while 1:
+    answer = prompt(main_question, style=custom_style_2)
 
-if answer.get('theme') == display_graph \
-    and answer.get('period') == all_period:
-    fields = answer.get('fields', [])
-    draw_graph(fields, 'all')
-elif answer.get('theme') == display_graph \
-    and answer.get('period') == choose_period:
-    fields = answer.get('fields', [])
-    period = (answer.get('start_period'), answer.get('end_period'))
-    draw_graph(fields, period)
-elif answer.get('theme') == display_clean \
-    and answer.get('clean_vis'):
-    draw_clean(answer.get('clean_vis'))
-elif answer.get('theme') == display_hist \
-    and answer.get('hist'):
-    draw_hist(answer.get('hist'))
-
+    if answer.get('theme') == display_graph \
+        and answer.get('period') == all_period:
+        fields = answer.get('fields', [])
+        draw_graph(fields, 'all')
+    elif answer.get('theme') == display_graph \
+        and answer.get('period') == choose_period:
+        fields = answer.get('fields', [])
+        period = (answer.get('start_period'), answer.get('end_period'))
+        draw_graph(fields, period)
+    elif answer.get('theme') == display_clean \
+        and answer.get('clean_vis'):
+        draw_clean(answer.get('clean_vis'))
+    elif answer.get('theme') == display_hist \
+        and answer.get('hist') and answer.get('date_hist'):
+        draw_hist(answer.get('hist'), answer.get('date_hist'))
+    else:
+        break
 
