@@ -106,10 +106,10 @@ while 1:
         period = (answer.get('start_period'), answer.get('end_period'))
         draw_graph(fields, period)
     elif answer.get('theme') == display_clean \
-        and answer.get('clean_vis'):
+        and answer.get('clean_vis', []):
         draw_clean(answer.get('clean_vis'))
     elif answer.get('theme') == display_hist \
-        and answer.get('hist') and answer.get('date_hist'):
+        and answer.get('hist', []) and answer.get('date_hist', []):
         draw_hist(answer.get('hist'), answer.get('date_hist'))
     else:
         break

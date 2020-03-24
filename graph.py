@@ -1,4 +1,3 @@
-import math
 import datetime
 import pylab
 
@@ -16,8 +15,11 @@ def draw_graph(fields, period):
         list_of_ylist.append(ylist)
     for xl, yl in zip(list_of_xlist, list_of_ylist):
         pylab.plot(xl, yl)
+        pylab.ylabel("Average weighted")
+        pylab.xlabel("Date")
         pylab.xticks(rotation=90)
     pylab.show()
+
 
 def draw_clean(field_id):
     counts = get_count_by_cloudiness(field_id)
@@ -30,6 +32,9 @@ def draw_clean(field_id):
     pylab.plot(xlist, ylist1, color='b', label='Clear')
     pylab.plot(xlist, ylist2, color='g', label='Clouded')
     pylab.plot(xlist, ylist3, color='r', label='Mixed')
+    pylab.title("Analysis of cloudiness of the field =" + field_id)
+    pylab.ylabel("Count of days")
+    pylab.xlabel("Month")
     pylab.figlegend()
     pylab.show()
 
@@ -39,7 +44,7 @@ def draw_hist(field_id, date):
     values = [(i[0], [i[0] for j in range(i[1])]) for i in freq]
     for i in values:
         pylab.hist(i[1], label=str(i[0]))
-
-    pylab.figlegend()
-
+    pylab.title("Frequency histogram of the field =" + field_id + " on " + date)
+    pylab.ylabel("Frequencies")
+    pylab.xlabel("Unique values")
     pylab.show()
