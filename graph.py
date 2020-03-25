@@ -5,16 +5,16 @@ from db import get_stats_by_field, get_count_by_cloudiness, get_freq
 
 
 def draw_graph(fields, period):
-    list_of_xlist = []
-    list_of_ylist = []
+
     for field in fields:
         res = get_stats_by_field(field, period)
-        xlist = [i[3] for i in sorted(res, key=lambda x: datetime.datetime.strptime(x[3], '%Y-%m-%d'))]
-        ylist = [(i[0], i[1], i[2]) for i in sorted(res, key=lambda x: x[3])]
-        list_of_xlist.append(xlist)
-        list_of_ylist.append(ylist)
-    for xl, yl in zip(list_of_xlist, list_of_ylist):
-        pylab.plot(xl, yl)
+        xlist, ylist = [], []
+
+        for i in sorted(res, key=lambda x: datetime.datetime.strptime(x[3], '%Y-%m-%d')):
+            xlist.append(datetime.datetime.strptime(i[3], '%Y-%m-%d'))
+            ylist.append((i[0], i[1], i[2]))
+
+        pylab.plot(xlist, ylist)
         pylab.ylabel("Average weighted")
         pylab.xlabel("Date")
         pylab.xticks(rotation=90)
