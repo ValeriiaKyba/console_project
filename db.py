@@ -11,7 +11,7 @@ def create_photo(filename, calc):
     :return:
     """
     date_raw = filename[0:8]
-    field_id = filename[10:15]
+    field_id = filename[9:15]
     date = datetime.datetime.strptime(date_raw, '%d%m%Y').date()
     cursor.execute("INSERT INTO photos(title, field_id, date_of_photo, weighted_average,"
                    " root_mean_square, min_confidence_interval, max_confidence_interval, cloudiness) values (?, ?, ?, ?, ?, ?, ?, ?)",
