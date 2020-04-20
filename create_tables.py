@@ -9,7 +9,10 @@ if __name__ == '__main__':
                        (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         title text,
-                        field_id char(23),
+                        field_code char(23),
+                        revision char(23),
+                        satellite char(23),
+                        smth char(23),
                         date_of_photo DATE,
                         weighted_average decimal, 
                         root_mean_square decimal, 
@@ -23,8 +26,8 @@ if __name__ == '__main__':
                            (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             photo_id INTEGER,
-                            val integer,
-                            frequency integer
+                            val char(23),
+                            frequency INTEGER
                            )
                        """)
     conn.commit()

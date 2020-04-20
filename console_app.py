@@ -1,6 +1,5 @@
 from __future__ import print_function, unicode_literals
 import datetime
-from pprint import pprint
 
 from PyInquirer import prompt, Separator
 
@@ -16,6 +15,15 @@ def validate_date_str(s):
     except Exception as e:
         return False
     return True
+
+
+def validate_date_md_str(s):
+    try:
+        datetime.datetime.strptime(s, '%m-%d')
+    except Exception as e:
+        return False
+    return True
+
 
 
 main_question = [
@@ -37,7 +45,6 @@ main_question = [
         'message': 'За який період бажаєте відобразити?',
         'when': lambda ans: ans.get('theme') == display_graph,
         'choices': [
-            all_period,
             choose_period,
             Separator(),
             exit_
@@ -46,16 +53,16 @@ main_question = [
     {
         'type': 'input',
         'name': 'start_period',
-        'message': 'Введіть початок періоду. (Рік-місяць-день)',
+        'message': 'Введіть початок періоду. (місяць-день)',
         'when': lambda ans: ans.get('period') == choose_period,
-        'validate': validate_date_str
+        'validate': validate_date_md_str
     },
     {
         'type': 'input',
         'name': 'end_period',
-        'message': 'Введіть кінець періоду. (Рік-місяць-день)',
+        'message': 'Введіть кінець періоду. (місяць-день)',
         'when': lambda ans: ans.get('start_period'),
-        'validate': validate_date_str
+        'validate': validate_date_md_str
     },
     {
         'type': 'checkbox',
@@ -63,6 +70,16 @@ main_question = [
         'message': 'Оберіть поля, які бажаєте бачити на графіку.',
         'name': 'fields',
         'choices': get_fields_list(),
+        'when': lambda ans: ans.get('theme') == display_graph,
+        'validate': lambda answer: 'You must choose at least one topping.' \
+            if len(answer) == 0 else True
+    },
+    {
+        'type': 'checkbox',
+        'qmark': '😃',
+        'message': 'Оберіть роки, які бажаєте бачити на графіку.',
+        'name': 'years',
+        'choices': list({'name': str(i)} for i in range(2000, 2020)),
         'when': lambda ans: ans.get('theme') == display_graph,
         'validate': lambda answer: 'You must choose at least one topping.' \
             if len(answer) == 0 else True
@@ -104,7 +121,9 @@ while 1:
         and answer.get('period') == choose_period:
         fields = answer.get('fields', [])
         period = (answer.get('start_period'), answer.get('end_period'))
-        draw_graph(fields, period)
+        years = answer.get('years', [])
+        print(period, years)
+        draw_graph(fields, period, years)
     elif answer.get('theme') == display_clean \
         and answer.get('clean_vis', []):
         draw_clean(answer.get('clean_vis'))
